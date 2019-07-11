@@ -3,7 +3,8 @@ export const featureName = 'mathFeature';
 import * as fromQuestions from './questions.reducer';
 
 import { createFeatureSelector, createSelector } from '@ngrx/store';
-import { QuestionModel } from '../models';
+import { QuestionModel, ScoresModel } from '../models';
+
 
 export interface MathState {
   questions: fromQuestions.MathQuestionsState;
@@ -26,6 +27,7 @@ const selectCurrentQuestionId = createSelector(selectQuestionsBranch, q => q.cur
 // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
 const {
   selectTotal: selectTotalNumberofQuestions,
+  selectAll: selectAllQuestions,
   selectEntities: selectQuestionEntities } = fromQuestions.adapter.getSelectors(selectQuestionsBranch);
 
 const selectSelectedQuestion = createSelector(
@@ -43,13 +45,12 @@ export const selectQuestionModel = createSelector(
   selectSelectedQuestion,
   selectCurrentQuestionId,
   (total, selected, currentId) => {
-    if (currentId > total) {
-      return {
-        num: selected.id,
-        of: total,
-        question: selected.question
-      } as QuestionModel;
-    }
+    if (currentId > total) { return null; }
+    return {
+      num: selected.id,
+      of: total,
+      question: selected.question
+    } as QuestionModel;
   }
 );
 
@@ -62,4 +63,40 @@ export const selectAtEndOfQuestions = createSelector(
 export const selectGameOverMan = createSelector(
   selectQuestionsBranch,
   q => q.missedQuestions.length === 3
+);
+
+const selectScores = createSelector(
+  selectQuestionsBranch,
+  b => b.missedQuestions
+);
+const selectNunmberCorrect = createSelector(
+  selectTotalNumberofQuestions,
+  selectScores,
+  (total, wrong) => total - wrong.length
+);
+export const selectScoresModel = createSelector(
+  selectTotalNumberofQuestions,
+  selectNunmberCorrect,
+  selectScores,
+  selectAllQuestions,
+  (numberOfQuestions, numberCorrect, scores, questions) => {
+    const result: ScoresModel = {
+      numberOfQuestions,
+      numberCorrect,
+      numberWrong: numberOfQuestions - numberCorrect,
+      scores: questions.map(q => {
+        const incorrect = scores.some(s => s.id === q.id);
+        const providedAnswer = incorrect ? scores.filter(s => s.id === q.id)[0].providedAnswer : null;
+        const questionResponse = {
+          num: q.id,
+          question: q.question,
+          answer: q.answer,
+          incorrect,
+          providedAnswer
+        };
+        return questionResponse;
+      })
+    };
+    return result;
+  }
 );

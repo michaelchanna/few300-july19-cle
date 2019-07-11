@@ -1,4 +1,6 @@
 <header>
   <h4>Your Scores</h4>
 </header>
-<app-score-list></app-score-list>
+<app-score-list [scoresModel]="scoresModel$ | async"></app-score-list>
+
+<!-- add a play again button that ALSO takes them back to the game -->

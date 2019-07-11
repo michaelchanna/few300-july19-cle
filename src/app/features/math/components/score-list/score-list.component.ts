@@ -1,5 +1,9 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { ScoresModel } from '../../models';
+import { MathState } from '../../reducers';
+import { Router } from '@angular/router';
+import { Store } from '@ngrx/store';
+import { playAgain } from '../../actions/questions.actions';
 
 @Component({
   selector: 'app-score-list',
@@ -14,9 +18,13 @@ export class ScoreListComponent implements OnInit {
     numberWrong: 0,
     scores: []
   };
-  constructor() { }
+  constructor(private store: Store<MathState>, private router: Router) { }
 
   ngOnInit() {
   }
 
+  playAgain() {
+    this.store.dispatch(playAgain());
+    this.router.navigate(['math', 'game']);
+  }
 }
