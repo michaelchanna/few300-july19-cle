@@ -9,13 +9,16 @@
   <li *ngFor="let score of scoresModel.scores">
     <div class="alert"
          [ngClass]="{'alert-success': !score.incorrect, 'alert-danger': score.incorrect}">
+      <span *ngIf="!score.incorrect">
+        <h4>Correct!</h4>
+      </span>
+      <span *ngIf="score.incorrect">
+        <h4>Opps, Inorrect Answer!</h4>
+      </span>
       <p>Question {{ score.num }} was
-        {{ score.question }}. The right answer was
-        {{ score.answer }}.
-        <span *ngIf="!score.incorrect">Wow! You got that right!</span>
+        <b>{{ score.question }} = {{ score.answer }}.</b>
         <span *ngIf="score.incorrect">
-          You got it wrong. You said {{ score.providedAnswer}}.
-          <em>Duh!</em>
+          <br>Your answer: <b>{{ score.providedAnswer}}.</b>
         </span>
       </p>
     </div>
@@ -24,3 +27,5 @@
 
 <button class="btn btn-success"
         (click)="playAgain()">PLAY AGAIN?</button>
+
+<br><br>
