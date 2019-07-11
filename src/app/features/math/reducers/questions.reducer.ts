@@ -8,12 +8,15 @@ export interface QuestionEntity {
   answer: number;
 }
 
+interface MissedQustion { id: number; providedAnswer: number; }
 export interface MathQuestionsState extends EntityState<QuestionEntity> {
   currentQuestionId: number;
+  missedQuestions: MissedQustion[];
 }
 
 const initialState: MathQuestionsState = {
   currentQuestionId: 1,
+  missedQuestions: [],
   ids: [1, 2, 3, 4, 5],
   entities: {
     1: {
@@ -48,7 +51,17 @@ export const adapter = createEntityAdapter<QuestionEntity>();
 
 export const reducer = createReducer(
   initialState,
-  on(questionActions.answerProvided, (state, action) => ({ ...state, currentQuestionId: state.currentQuestionId + 1 }))
+  on(questionActions.answerProvided, (state, action) => {
+    let tempState = { ...state };
+    // we need to know if the guess is the answer to the current question
+    const currentQuestion = state.entities[state.currentQuestionId];
+    if (action.guess !== state.entities[state.currentQuestionId].answer) {
+      // add the questionId and their guess to the array of missedQuestions
+      tempState = { ...tempState, missedQuestions: [...state.missedQuestions, { id: currentQuestion.id, providedAnswer: action.guess }] };
+    }
+    const newState = ({ ...tempState, currentQuestion: state.currentQuestionId + 1 });
+    return newState;
+  })
 );
 
 

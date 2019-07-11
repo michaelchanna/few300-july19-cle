@@ -21,8 +21,11 @@ const selectQuestionsBranch = createSelector(selectMathFeature, m => m.questions
 
 // 3. Selectors that are "helpers" to get the data you need for step 4.
 const selectCurrentQuestionId = createSelector(selectQuestionsBranch, q => q.currentQuestionId);
+
+// Object Destructuring (GOOGLE: mdn object destructuring)
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
 const {
-  selectTotal: totalQuestions,
+  selectTotal: selectTotalNumberofQuestions,
   selectEntities: selectQuestionEntities } = fromQuestions.adapter.getSelectors(selectQuestionsBranch);
 
 const selectSelectedQuestion = createSelector(
@@ -36,7 +39,7 @@ const selectSelectedQuestion = createSelector(
 // current id, how many total, question for current question
 
 export const selectQuestionModel = createSelector(
-  totalQuestions,
+  selectTotalNumberofQuestions,
   selectSelectedQuestion,
   (total, selected) => {
     return {
@@ -48,7 +51,7 @@ export const selectQuestionModel = createSelector(
 );
 
 export const selectAtEndOfQuestions = createSelector(
-  totalQuestions,
+  selectTotalNumberofQuestions,
   selectCurrentQuestionId,
   (total, current) => total === current
 );
