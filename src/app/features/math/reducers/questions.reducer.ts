@@ -1,6 +1,7 @@
 import { Action, createReducer, on } from '@ngrx/store';
 import { createEntityAdapter, EntityState } from '@ngrx/entity';
 import * as questionActions from '../actions/questions.actions';
+import { tassign } from 'tassign';
 
 export interface QuestionEntity {
   id: number;
@@ -49,8 +50,10 @@ const initialState: MathQuestionsState = {
 
 export const adapter = createEntityAdapter<QuestionEntity>();
 
-export const reducer = createReducer(
+// Whatever comes from the 'on' statements, is what the next application state will be.
+const mathReducer = createReducer(
   initialState,
+  on(questionActions.playAgain, () => initialState),
   on(questionActions.answerProvided, (state, action) => {
     let tempState = { ...state };
     // we need to know if the guess is the answer to the current question
@@ -59,9 +62,13 @@ export const reducer = createReducer(
       // add the questionId and their guess to the array of missedQuestions
       tempState = { ...tempState, missedQuestions: [...state.missedQuestions, { id: currentQuestion.id, providedAnswer: action.guess }] };
     }
-    const newState = ({ ...tempState, currentQuestion: state.currentQuestionId + 1 });
+    // const newState = ({ ...tempState, currentQuestionId: state.currentQuestionId + 1 });
+    const newState = tassign(tempState, { currentQuestionId: state.currentQuestionId + 1 });
     return newState;
   })
 );
 
+export function reducer(state: MathQuestionsState | undefined, action: Action) {
+  return mathReducer(state, action);
+}
 
