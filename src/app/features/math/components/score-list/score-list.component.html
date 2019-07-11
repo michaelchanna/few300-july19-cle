@@ -1,9 +1,12 @@
-<h4>You Win!</h4>
+<h4>Congratultions, You Won!</h4>
 <p>
   Of <b>{{ scoresModel.numberOfQuestions }} </b>questions,
   you got <font color="green">{{ scoresModel.numberCorrect }} correct</font>
   and you got <font color="red">{{ scoresModel.numberWrong }} wrong.</font>
 </p>
+<button class="btn btn-success"
+        (click)="playAgain()">PLAY AGAIN?</button>
+<br><br>
 
 <ul class="list-unstyled">
   <li *ngFor="let score of scoresModel.scores">
@@ -25,7 +28,6 @@
   </li>
 </ul>
 
-<button class="btn btn-success"
-        (click)="playAgain()">PLAY AGAIN?</button>
+
 
 <br><br>
