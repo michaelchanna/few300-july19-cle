@@ -16,7 +16,7 @@ export interface MathQuestionsState extends EntityState<QuestionEntity> {
 }
 
 const initialState: MathQuestionsState = {
-  currentQuestionId: 1,
+  currentQuestionId: 4,
   missedQuestions: [],
   ids: [1, 2, 3, 4, 5],
   entities: {
@@ -68,6 +68,8 @@ const mathReducer = createReducer(
   })
 );
 
+// Note: We have to do this because the ng AOT compiler cannot import from the result of a function call
+// so we export instead a function that calls our function.
 export function reducer(state: MathQuestionsState | undefined, action: Action) {
   return mathReducer(state, action);
 }

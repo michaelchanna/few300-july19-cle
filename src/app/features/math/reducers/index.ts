@@ -41,12 +41,15 @@ const selectSelectedQuestion = createSelector(
 export const selectQuestionModel = createSelector(
   selectTotalNumberofQuestions,
   selectSelectedQuestion,
-  (total, selected) => {
-    return {
-      num: selected.id,
-      of: total,
-      question: selected.question
-    } as QuestionModel;
+  selectCurrentQuestionId,
+  (total, selected, currentId) => {
+    if (currentId > total) {
+      return {
+        num: selected.id,
+        of: total,
+        question: selected.question
+      } as QuestionModel;
+    }
   }
 );
 
