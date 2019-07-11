@@ -7,6 +7,7 @@ import { ScoresComponent } from './components/scores/scores.component';
 import { StoreModule } from '@ngrx/store';
 import { reducers, featureName } from './reducers';
 import { ScoreListComponent } from './components/score-list/score-list.component';
+import { GameOverGuard } from './guards/game-over.guard';
 
 const routes: Routes = [
   {
@@ -22,7 +23,8 @@ const routes: Routes = [
       },
       {
         path: 'scores',
-        component: ScoresComponent
+        component: ScoresComponent,
+        canActivate: [GameOverGuard]
       }
     ]
   }
