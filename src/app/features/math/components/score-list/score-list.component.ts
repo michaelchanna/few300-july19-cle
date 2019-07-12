@@ -4,6 +4,7 @@ import { MathState } from '../../reducers';
 import { Router } from '@angular/router';
 import { Store } from '@ngrx/store';
 import { playAgain } from '../../actions/questions.actions';
+import * as actions from '../../actions/saved-scores.actions';
 
 @Component({
   selector: 'app-score-list',
@@ -18,6 +19,8 @@ export class ScoreListComponent implements OnInit {
     numberWrong: 0,
     scores: []
   };
+  saved = false;
+
   constructor(private store: Store<MathState>, private router: Router) { }
 
   ngOnInit() {
@@ -26,5 +29,11 @@ export class ScoreListComponent implements OnInit {
   playAgain() {
     this.store.dispatch(playAgain());
     this.router.navigate(['math', 'game']);
+  }
+
+  saveScores() {
+    this.store.dispatch(actions.saveScore(this.scoresModel.numberCorrect,
+      this.scoresModel.numberWrong));
+    this.saved = true;
   }
 }

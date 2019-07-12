@@ -16,7 +16,7 @@ export class SavedScoresComponent implements OnInit {
   constructor(private store: Store<MathState>) { }
 
   ngOnInit() {
-    this.store.dispatch(loadSavedScores());
+    // this.store.dispatch(loadSavedScores());
     this.model$ = this.store.select(selectSavedScoresModel);
   }
 

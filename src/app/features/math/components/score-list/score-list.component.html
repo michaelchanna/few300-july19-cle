@@ -6,6 +6,10 @@
 </p>
 <button class="btn btn-success"
         (click)="playAgain()">PLAY AGAIN?</button>
+&nbsp;&nbsp;
+<button class="btn btn-primary"
+        [hidden]="saved"
+        (click)="saveScores()">Save Your Score</button>
 <br><br>
 
 <ul class="list-unstyled">

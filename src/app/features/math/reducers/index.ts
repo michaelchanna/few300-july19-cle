@@ -2,6 +2,7 @@
 export const featureName = 'mathFeature';
 import * as fromQuestions from './questions.reducer';
 import * as fromSavedScores from './saved-scores.reducer';
+import * as fromUiHints from './ui-hints.reducer';
 
 import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { QuestionModel, ScoresModel } from '../models';
@@ -10,11 +11,13 @@ import { QuestionModel, ScoresModel } from '../models';
 export interface MathState {
   questions: fromQuestions.MathQuestionsState;
   savedScores: fromSavedScores.SavedScoresState;
+  ui: fromUiHints.UiHintsState;
 }
 
 export const reducers = {
   questions: fromQuestions.reducer,
-  savedScores: fromSavedScores.savedScoresReducer
+  savedScores: fromSavedScores.savedScoresReducer,
+  ui: fromUiHints.reducer
 };
 
 // 1. Create a feature selector (that knows how to find the feature in the state)

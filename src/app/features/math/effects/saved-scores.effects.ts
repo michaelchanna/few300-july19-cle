@@ -1,15 +1,27 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as savedScoreActions from '../actions/saved-scores.actions';
-import { tap, switchMap, map } from 'rxjs/operators';
+import { tap, switchMap, map, catchError } from 'rxjs/operators';
 import { environment } from '../../../../environments/environment';
 import { HttpClient } from '@angular/common/http';
 import { SavedScoreModel } from '../reducers/saved-scores.reducer';
+import { of } from 'rxjs';
 
 @Injectable()
 export class SavedScoresEffects {
 
   url: string;
+  saveScore$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(savedScoreActions.saveScore),
+      map(a => a.payload),
+      switchMap(org => this.http.post<SavedScoreModel>(this.url, ({ who: org.who, right: org.right, wrong: org.wrong } as ScoresCreate))
+        .pipe(
+          map(result => savedScoreActions.saveScoreSucceeded({ oldId: org.id, newScore: result })),
+          catchError(err => of(savedScoreActions.saveScoreFailed({ id: org.id, reason: 'BAD REQUEST: Cannot save.' })))
+        )
+      )
+    ));
 
   // loadData action -> goto API, get data, turn that into -> loadDataSucceeded
   loadData$ = createEffect(() =>
@@ -32,4 +44,10 @@ export class SavedScoresEffects {
 
 interface ScoresDataFromServer {
   scores: SavedScoreModel[];
+}
+
+interface ScoresCreate {
+  who: string;
+  right: number;
+  wrong: number;
 }
