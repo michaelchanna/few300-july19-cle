@@ -14,6 +14,10 @@ const routes: Routes = [
     component: FourOhFourComponent
   },
   {
+    path: 'admin',
+    loadChildren: () => import('./features/admin/admin.module').then(mod => mod.AdminModule)  // Ex of Lazy Loading a module.
+  },
+  {
     path: '**',
     redirectTo: 'not-found'
   }
