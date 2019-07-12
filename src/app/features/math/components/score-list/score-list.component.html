@@ -1,8 +1,8 @@
 <h4>Congratultions, You Won!</h4>
 <p>
-  Of <b>{{ scoresModel.numberOfQuestions }} </b>questions,
-  you got <font color="green">{{ scoresModel.numberCorrect }} correct</font>
-  and you got <font color="red">{{ scoresModel.numberWrong }} wrong.</font>
+  <b>{{ scoresModel.numberOfQuestions }} </b>total questions.<br>
+  You got <font color="green">{{ scoresModel.numberCorrect }} correct.</font><br>
+  You got <font color="red">{{ scoresModel.numberWrong }} wrong.</font><br>
 </p>
 <button class="btn btn-success"
         (click)="playAgain()">PLAY AGAIN?</button>
